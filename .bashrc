@@ -180,3 +180,5 @@ if [[ -n "$OPEN_DEFAULT_TABS" ]]; then
     exit 0 # close the calling process so only the "default tabs" are left open
 fi
 alias config='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
+alias config='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/.git/ --work-tree=/home/jackmurphy'
+alias config='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
