@@ -178,7 +178,7 @@ if [[ -n "$OPEN_DEFAULT_TABS" ]]; then
 fi
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=/$HOME'
-"alias cfg='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
+# alias cfg='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
 
 # Maybe include git shortcuts
 if [ -f $HOME/.bash_git_shortcuts ]; then

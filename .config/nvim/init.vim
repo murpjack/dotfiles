@@ -5,6 +5,7 @@
 " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 " TODO: Write a colorscheme from template
+" TODO: NERDTree - fix file icons (Font issue??)
 " TODO: Configure Tmux 
 " TODO: Configure work/personal env 
 " TODO: ELM - Format on save
@@ -51,7 +52,7 @@ Plug 'http://github.com/sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
 Plug 'eugen0329/vim-esearch' " In place of vim-ack and nerdtree-ack
-
+Plug 'ryanoasis/vim-devicons'
 
 " ELM
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -59,7 +60,7 @@ Plug 'neoclide/coc-highlight'
 
 " Neorg - org-mode
 Plug 'nvim-neorg/neorg' | Plug 'nvim-lua/plenary.nvim'
-
+Plug 'vimwiki/vimwiki'
 
 " JS
 Plug 'pangloss/vim-javascript'
@@ -207,6 +208,9 @@ autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_
 
 let NERDTreeDirArrowExpandable=">"
 let NERDTreeDirArrowCollapsible="v"
+
+" adding the flags to NERDTree
+let g:webdevicons_enable_nerdtree = 1
 
 
 " a list of groups can be found at `:help nvim_tree_highlight`
