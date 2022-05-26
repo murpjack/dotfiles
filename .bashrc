@@ -161,16 +161,13 @@ fi
 
 DEFAULT_TABS_TITLE1="notes"
 DEFAULT_TABS_TITLE2="aric"
-DEFAULT_TABS_TITLE3="aric"
 
 DEFAULT_TABS_CMD1="vimwiki"
 DEFAULT_TABS_CMD2="cd ~/Development/aric/"
-DEFAULT_TABS_CMD3="cd ~/Development/aric/"
 
 tabs() {
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
 }
 
 # If length of this is NONzero
@@ -181,3 +178,9 @@ if [[ -n "$OPEN_DEFAULT_TABS" ]]; then
 fi
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=/$HOME'
+"alias cfg='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
+
+# Maybe include git shortcuts
+if [ -f $HOME/.bash_git_shortcuts ]; then
+    . $HOME/.bash_git_shortcuts
+fi
