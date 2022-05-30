@@ -105,6 +105,9 @@ let g:ftcolor_color_mappings = {}
 " TODO add styles + font for .org files; needs an elegant solution   
 let g:ftcolor_color_mappings.org = 'gruvbox'
 
+" TODO add styles + font for .org files; needs an elegant solution   
+let g:ftcolor_color_mappings.md = 'gruvbox'
+
 
 " conceallevels 
 " 0 - No concealed characters
@@ -319,6 +322,9 @@ function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+
+
 
 " References:
 " https://github.com/bitterjug/dotfiles/tree/master/nvim
