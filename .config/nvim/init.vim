@@ -1,13 +1,8 @@
 "
-" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-"
 "   Jack Murphy vim setup
 "
 " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-" TODO: Write a colorscheme from template
-" TODO: NERDTree - fix file icons (Font issue??)
-" TODO: Configure Tmux 
 " TODO: Configure work/personal env 
 " TODO: ELM - Format on save
 " TODO: ELM - key mapping to expose module/type/etc 
@@ -32,7 +27,6 @@ map \ <Leader>
 let g:vimsyn_embed= 'l'
 
 
-
 " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "   
 "   Plugins
@@ -52,31 +46,18 @@ Plug 'http://github.com/sheerun/vim-polyglot'
 " File tree viewer
 Plug 'scrooloose/nerdtree'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
-Plug 'eugen0329/vim-esearch' " In place of vim-ack and nerdtree-ack
-Plug 'ryanoasis/vim-devicons'
 
-" ELM
+" Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
-
-" Organisation
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'nvim-orgmode/orgmode'
-" Plug 'nvim-neorg/neorg' | Plug 'nvim-lua/plenary.nvim'
-Plug 'vimwiki/vimwiki'
-
-" JS
 Plug 'pangloss/vim-javascript'
 
 
-" Colours
-Plug 'caglartoklu/ftcolor.vim'
-Plug 'sts10/vim-pink-moon'
-Plug 'joshdick/onedark.vim'
-Plug 'morhetz/gruvbox'
+" Organisation
+Plug 'lervag/wiki.vim'
 
-" Icons
-Plug 'ryanoasis/vim-devicons'
+" Colours
+Plug 'flrnd/candid.vim'
 
 
 call plug#end()
@@ -89,24 +70,11 @@ call plug#end()
 "
 " -------------------
 
-
 if (has("termguicolors"))
   set termguicolors
 endif
 
-
-"autocmd BufWinEnter * if match(@%,'/tmp/')>=0 | set background=light | else | set background=dark | end
-
-let g:gruvbox_contrast_light = 'hard'
-
-colorscheme onedark
-let g:ftcolor_color_mappings = {}
-
-" TODO add styles + font for .org files; needs an elegant solution   
-let g:ftcolor_color_mappings.org = 'gruvbox'
-
-" TODO add styles + font for .org files; needs an elegant solution   
-let g:ftcolor_color_mappings.md = 'gruvbox'
+colorscheme candid
 
 
 " conceallevels 
@@ -119,6 +87,8 @@ set conceallevel=2
 
 " On startup
 autocmd VimEnter * edit ~/.bashrc
+" opening path/to/init.vim on start happens before formatting is applied
+" TODO This seems a bit hacky and there is surely a neater solution
 autocmd VimEnter * call timer_start(5, { -> execute("edit $MYVIMRC")})
 
 
@@ -147,7 +117,7 @@ tnoremap <Leader><Space> <C-\><C-n>:Buf<CR>
 
 " Search in home or present directory
 nmap <C-l>  :Files $HOME<CR>
-nmap <C-p>  :Files <CR>
+nmap <C-p>  :Files<CR>
 
 
 
@@ -208,8 +178,9 @@ let g:nvim_tree_icons = {
     \   }
     \ }
 
+
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-n> :NERDTree<CR> 
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
@@ -240,6 +211,20 @@ highlight NvimTreeFolderIcon guibg=blue
 "
 " ----------------------------------
 " Look at coc - https://github.com/neoclide/coc.nvim#example-vim-configuration
+
+
+" Tab to select a value from autocomplete list
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 
 
 " GoTo code navigation.
@@ -280,7 +265,7 @@ autocmd FileType elm nnoremap <buffer> <leader>] yiw:ilist ^\s*<c-r>"\s.*=$<cr>
 
 " JS 
 let g:javascript_conceal_function             = "ƒ"
-let g:javascript_conceal_return               = "⇚"
+" let g:javascript_conceal_return               = "⇚"
 let g:javascript_conceal_arrow_function       = "⇒"
 
 
@@ -288,41 +273,11 @@ let g:javascript_conceal_arrow_function       = "⇒"
 "   Organisation
 "
 " --------------------
-
-" init.vim
-lua << EOF
-
--- Load custom tree-sitter grammar for org filetype
-require('orgmode').setup_ts_grammar()
-
--- Tree-sitter configuration
-require'nvim-treesitter.configs'.setup {
-  -- If TS highlights are not enabled at all, or disabled via `disable` prop, highlighting will fallback to default Vim syntax highlighting
-  highlight = {
-    enable = true,
-    disable = {'org'}, -- Remove this to use TS highlighter for some of the highlights (Experimental)
-    additional_vim_regex_highlighting = {'org'}, -- Required since TS highlighter doesn't support all syntax features (conceal)
-  },
-  ensure_installed = {'org'}, -- Or run :TSUpdate org
-}
-
-require('orgmode').setup({
-  org_agenda_files = {'~/Notes/org/*', '~/my-orgs/**/*'},
-  org_default_notes_file = '~/Notes/org/refile.org',
-})
-EOF
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
+let g:wiki_root = '~/Notes'
+let g:wiki_filetypes = ['md', 'wiki']
+let g:wiki_index_name = 'index.md'
+let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
+let g:wiki_link_extension = '.md'
 
 
 
