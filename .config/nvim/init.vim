@@ -27,6 +27,8 @@ map \ <Leader>
 let g:vimsyn_embed= 'l'
 
 
+let $FZF_DEFAULT_COMMAND='find . \! \( -type d -path ./.git -prune \) \! -type d \! -name ''*.tags'' -printf ''%P\n'''
+
 " +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "   
 "   Plugins
@@ -41,11 +43,12 @@ call plug#begin(expand(plugins_dir))
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
 Plug 'http://github.com/sheerun/vim-polyglot'
-
+Plug 'christoomey/vim-tmux-navigator'
 
 " File tree viewer
 Plug 'scrooloose/nerdtree'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
+
 
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -245,14 +248,14 @@ endif
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    call feedkeys('K', 'in')
   endif
 endfunction
-
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
