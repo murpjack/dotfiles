@@ -39,11 +39,12 @@ let $FZF_DEFAULT_COMMAND='find . \! \( -type d -path ./.git -prune \) \! -type d
 let plugins_dir = '~/.config/nvim/vim-plug'
 call plug#begin(expand(plugins_dir))
 
-
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
 Plug 'http://github.com/sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'jiangmiao/auto-pairs'
+Plug 'alvan/vim-closetag'
 
 " File tree viewer
 Plug 'scrooloose/nerdtree'
@@ -94,7 +95,7 @@ autocmd VimEnter * edit ~/.bashrc
 " TODO This seems a bit hacky and there is surely a neater solution
 autocmd VimEnter * call timer_start(5, { -> execute("edit $MYVIMRC")})
 
-
+let g:closetag_filenames = '*.html,*.xhtml,*.xml,*.vue,*.phtml,*.js,*.jsx,*.coffee,*.erb,*.elm'
 
 "   Search
 "
