@@ -42,9 +42,7 @@ call plug#begin(expand(plugins_dir))
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
 Plug 'http://github.com/sheerun/vim-polyglot'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'jiangmiao/auto-pairs'
-Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-surround'
 
 " File tree viewer
 Plug 'scrooloose/nerdtree'
@@ -280,7 +278,7 @@ let g:javascript_conceal_arrow_function       = "⇒"
 let g:wiki_root = '~/Notes'
 let g:wiki_filetypes = ['md', 'wiki']
 let g:wiki_index_name = 'index.md'
-let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
+let g:wiki_fzf_pages_opts = '--preview "cat 1"'
 let g:wiki_link_extension = '.md'
 
 
