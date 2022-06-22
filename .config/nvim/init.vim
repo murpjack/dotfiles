@@ -282,7 +282,6 @@ let g:wiki_fzf_pages_opts = '--preview "cat 1"'
 let g:wiki_link_extension = '.md'
 
 
-
 " References:
 " https://github.com/bitterjug/dotfiles/tree/master/nvim
 " https://github.com/lazamar/dotfiles/blob/master/.config/nvim/init.vim
