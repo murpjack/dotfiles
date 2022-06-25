@@ -54,6 +54,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
 Plug 'pangloss/vim-javascript'
 
+"Plug 'plasticboy/vim-markdown'
+"Plug 'preservim/vim-markdown'
+Plug 'tpope/vim-markdown'
 
 " Organisation
 Plug 'lervag/wiki.vim'
@@ -93,7 +96,11 @@ autocmd VimEnter * edit ~/.bashrc
 " TODO This seems a bit hacky and there is surely a neater solution
 autocmd VimEnter * call timer_start(5, { -> execute("edit $MYVIMRC")})
 
-let g:closetag_filenames = '*.html,*.xhtml,*.xml,*.vue,*.phtml,*.js,*.jsx,*.coffee,*.erb,*.elm'
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+" Used when creating timestamps for note-taking
+cnoremap <F5> <C-r>=strftime('%Y%m%d%H%M%S')<CR>
+
 
 "   Search
 "
@@ -276,10 +283,10 @@ let g:javascript_conceal_arrow_function       = "⇒"
 "
 " --------------------
 let g:wiki_root = '~/Notes'
-let g:wiki_filetypes = ['md', 'wiki']
+let g:wiki_filetypes = ['markdown', 'md', 'wiki']
 let g:wiki_index_name = 'index.md'
 let g:wiki_fzf_pages_opts = '--preview "cat 1"'
-let g:wiki_link_extension = '.md'
+let g:wiki_link_extension = '.markdown'
 
 
 " References:
