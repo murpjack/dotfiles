@@ -1,18 +1,17 @@
 "
 "   Jack Murphy vim setup
 "
-" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-" TODO: Configure work/personal env 
-" TODO: ELM - Format on save
-" TODO: ELM - key mapping to expose module/type/etc 
 "
 set nocompatible
 if !exists('g:syntax_on')
 	syntax enable
 endif
-set nowrap
 set encoding=utf8
+set nonumber
+set nowrap
+
+" Toggle line numbers
+nmap <F1> :set number!<CR>
 
 
 " Both , and \ act as leader
@@ -25,61 +24,77 @@ map \ <Leader>
 "   g:vimsyn_embed == 0      : disable (don't embed any scripts)
 "   g:vimsyn_embed == 'lPr'  : support embedded lua, python and ruby
 let g:vimsyn_embed= 'l'
-
+let g:loaded_perl_provider = 0
 
 let $FZF_DEFAULT_COMMAND='find . \! \( -type d -path ./.git -prune \) \! -type d \! -name ''*.tags'' -printf ''%P\n'''
 
-" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-"   
-"   Plugins
-"
-" --------------
-
-
+" Plugins
 let plugins_dir = '~/.config/nvim/vim-plug'
 call plug#begin(expand(plugins_dir))
 
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
-Plug 'http://github.com/sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-obsession'
+Plug 'itchyny/lightline.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'sheerun/vim-polyglot'
 
 " File tree viewer
 Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
-
+Plug 'christoomey/vim-tmux-navigator'
 
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
-Plug 'pangloss/vim-javascript'
-
-"Plug 'plasticboy/vim-markdown'
-"Plug 'preservim/vim-markdown'
-Plug 'tpope/vim-markdown'
-
-" Organisation
-Plug 'lervag/wiki.vim'
+Plug 'elm-tooling/elm-language-server'
 
 " Colours
-Plug 'flrnd/candid.vim'
-
+Plug 'rainglow/vim'
 
 call plug#end()
 
-
-
-" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-"
-"   Configuration
-"
-" -------------------
+filetype plugin indent on
+set tabstop=4
+set shiftwidth=4
+set expandtab
 
 if (has("termguicolors"))
   set termguicolors
 endif
 
-colorscheme candid
+colorscheme absent-contrast
+
+
+" lightline
+set laststatus=2
+set noshowmode
+
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'component_function': {
+			\   'filename': 'LightlineFilename'
+      \ },
+      \ }
+
+
+function! LightlineFilename()
+  let root = fnamemodify(get(b:, 'git_dir'), ':h')
+  let path = expand('%:p')
+  if path[:len(root)-1] ==# root
+    return path[len(root)+1:]
+  endif
+  return expand('%')
+endfunction
+
+
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
+
 
 
 " conceallevels 
@@ -92,19 +107,7 @@ set conceallevel=2
 
 " On startup
 autocmd VimEnter * edit ~/.bashrc
-" opening path/to/init.vim on start happens before formatting is applied
-" TODO This seems a bit hacky and there is surely a neater solution
-autocmd VimEnter * call timer_start(5, { -> execute("edit $MYVIMRC")})
-
-au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-
-" Used when creating timestamps for note-taking
-cnoremap <F5> <C-r>=strftime('%Y%m%d%H%M%S')<CR>
-
-
-"   Search
-"
-" -----------
+autocmd VimEnter * edit $MYVIMRC
 
 
 " Re-source nvim
@@ -131,9 +134,7 @@ nmap <C-p>  :Files<CR>
 
 
 
-"   Navigation & Tab mischief
-"
-" --------------------------------
+" Navigation
 
 " Mouse can scroll
 set mouse=a
@@ -165,14 +166,11 @@ tmap <Leader>t  <C-\><C-n>:split  \| execute "terminal" \| startinsert <CR>
 tnoremap <Leader>q <C-\><C-n>:bd!<CR>
 noremap  <Leader>q      <C-w>:bd!<CR>
 
+" Save session state (buffers, splits, file locations, etc) - Obsession
+noremap <F2> :Obsess! . <cr> " Quick write session with F2
 
 
-
-"   File tree 
-"
-" ---------------
-
-
+"   Nerd tree 
 let g:nvim_tree_icons = {
     \ 'default': "",
     \ 'symlink': "",
@@ -198,6 +196,7 @@ nnoremap <C-f> :NERDTreeFind<CR>
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
+
 let NERDTreeDirArrowExpandable=">"
 let NERDTreeDirArrowCollapsible="v"
 
@@ -215,33 +214,29 @@ augroup END
 " a list of groups can be found at `:help nvim_tree_highlight`
 highlight NvimTreeFolderIcon guibg=blue
 
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
 
-"		Coc language server et all
-"
-" ----------------------------------
-" Look at coc - https://github.com/neoclide/coc.nvim#example-vim-configuration
-
+" Coc language server et al
+" ref: https://github.com/neoclide/coc.nvim#example-vim-configuration
 
 " Tab to select a value from autocomplete list
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -250,10 +245,14 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
+" Use K to show documentation in preview window.
 nnoremap <silent> K :call ShowDocumentation()<CR>
-
 
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -267,30 +266,6 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 
-" ELM
-" go to the definition of the function under the cursoer
-" Ilist is the ilist variant from romainl/vim-qlist
-autocmd FileType elm nnoremap <buffer> <leader>] yiw:ilist ^\s*<c-r>"\s.*=$<cr>
-
-" JS 
 let g:javascript_conceal_function             = "ƒ"
 " let g:javascript_conceal_return               = "⇚"
 let g:javascript_conceal_arrow_function       = "⇒"
-
-
-
-"   Organisation
-"
-" --------------------
-let g:wiki_root = '~/Notes'
-let g:wiki_filetypes = ['markdown', 'md', 'wiki']
-let g:wiki_index_name = 'index.md'
-let g:wiki_fzf_pages_opts = '--preview "cat 1"'
-let g:wiki_link_extension = '.markdown'
-
-
-" References:
-" https://github.com/bitterjug/dotfiles/tree/master/nvim
-" https://github.com/lazamar/dotfiles/blob/master/.config/nvim/init.vim
-
-

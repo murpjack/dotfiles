@@ -5,7 +5,8 @@
     "elm",
     "json",
     "javascript",
-    "typescript"
+    "typescript",
+    "markdown"
   ],
   "coc.preferences.formatOnType": true,
   "codeLens.enable": true,
@@ -14,12 +15,8 @@
     "elmLS": {
       "enable": true,
       "command": "elm-language-server",
-      "filetypes": [
-        "elm"
-      ],
-      "rootPatterns": [
-        "elm.json"
-      ],
+      "filetypes": ["elm"],
+      "rootPatterns": ["elm.json"],
       "trace.server": "off",
       "initializationOptions": {
         "elmFormatPath": "elm-format",
