@@ -184,3 +184,5 @@ alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=/$HOME'
 if [ -f $HOME/.bash_git_shortcuts ]; then
     . $HOME/.bash_git_shortcuts
 fi
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

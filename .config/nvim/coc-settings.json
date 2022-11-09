@@ -1,27 +1,15 @@
 {
   "coc.preferences.formatOnSaveFiletypes": [
-    "css",
-    "scss",
     "elm",
-    "json",
-    "javascript",
-    "typescript",
-    "markdown"
+    "css",
+    "scss"
   ],
-  "coc.preferences.formatOnType": true,
   "codeLens.enable": true,
-  "suggest.minTriggerInputLength": 1,
   "languageserver": {
     "elmLS": {
-      "enable": true,
       "command": "elm-language-server",
       "filetypes": ["elm"],
-      "rootPatterns": ["elm.json"],
-      "trace.server": "off",
-      "initializationOptions": {
-        "elmFormatPath": "elm-format",
-        "elmAnalyseTrigger": "save"
-      }
+      "rootPatterns": ["elm.json"]
     }
   }
 }

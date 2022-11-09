@@ -38,7 +38,12 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'jreybert/vimagit'
 Plug 'sheerun/vim-polyglot'
+Plug 'jiangmiao/auto-pairs'
+
+" Markdown & note-taking
+Plug 'junegunn/goyo.vim'
 
 " File tree viewer
 Plug 'scrooloose/nerdtree'
@@ -51,9 +56,11 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
 Plug 'elm-tooling/elm-language-server'
+Plug 'sbdchd/neoformat'
 
 " Colours
 Plug 'rainglow/vim'
+Plug 'bluz71/vim-moonfly-colors'
 
 call plug#end()
 
@@ -62,12 +69,13 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+
 if (has("termguicolors"))
   set termguicolors
 endif
 
-colorscheme absent-contrast
-
+"colorscheme absent-contrast
+colorscheme moonfly
 
 " lightline
 set laststatus=2
@@ -113,6 +121,9 @@ autocmd VimEnter * edit $MYVIMRC
 " Re-source nvim
 nnoremap <Leader>sr :source $MYVIMRC<CR>
 
+" ctrl save in normal or insert mode
+noremap <c-s> :w<CR>
+inoremap <c-s> <Esc>:w<CR>a
 
 " Search recently-used history
 nmap <C-c>  :History:<space><CR>
@@ -130,7 +141,6 @@ tnoremap <Leader><Space> <C-\><C-n>:Buf<CR>
 " Search in home or present directory
 nmap <C-l>  :Files $HOME<CR>
 nmap <C-p>  :Files<CR>
-
 
 
 
