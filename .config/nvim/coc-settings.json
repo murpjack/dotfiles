@@ -4,7 +4,7 @@
     "css",
     "scss"
   ],
-  "codeLens.enable": true,
+  "coc.preferences.codeLens.enable": true,
   "languageserver": {
     "elmLS": {
       "command": "elm-language-server",
