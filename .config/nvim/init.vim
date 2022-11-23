@@ -1,5 +1,5 @@
 "
-"   Jack Murphy vim setup
+"   Jack Murphy vim
 "
 "
 set nocompatible
@@ -41,6 +41,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'jreybert/vimagit'
 Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
+Plug 'christoomey/vim-tmux-navigator'
 
 " Markdown & note-taking
 Plug 'junegunn/goyo.vim'
@@ -50,13 +51,13 @@ Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
-Plug 'christoomey/vim-tmux-navigator'
 
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
 Plug 'elm-tooling/elm-language-server'
 Plug 'sbdchd/neoformat'
+Plug 'rust-lang/rust.vim'
 
 " Colours
 Plug 'rainglow/vim'
@@ -115,6 +116,7 @@ set conceallevel=2
 
 " On startup
 autocmd VimEnter * edit ~/.bashrc
+autocmd VimEnter * edit ~/.tmux.conf
 autocmd VimEnter * edit $MYVIMRC
 
 
@@ -279,3 +281,5 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 let g:javascript_conceal_function             = "ƒ"
 " let g:javascript_conceal_return               = "⇚"
 let g:javascript_conceal_arrow_function       = "⇒"
+
+let g:rustfmt_autosave = 1
