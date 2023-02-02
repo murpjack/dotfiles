@@ -26,7 +26,17 @@ map \ <Leader>
 let g:vimsyn_embed= 'l'
 let g:loaded_perl_provider = 0
 
-let $FZF_DEFAULT_COMMAND='find . \! \( -type d -path ./.git -prune \) \! -type d \! -name ''*.tags'' -printf ''%P\n'''
+let $FZF_DEFAULT_COMMAND='find . \! \( -type d \) \! -type d \! -name ''*.tags'' -printf ''%P\n'''
+
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release --locked
+    else
+      !cargo build --release --locked --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
 
 " Plugins
 let plugins_dir = '~/.config/nvim/vim-plug'
@@ -39,15 +49,19 @@ Plug 'tpope/vim-obsession'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'jreybert/vimagit'
+Plug 'zivyangll/git-blame.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
+
 
 " Markdown & note-taking
 Plug 'junegunn/goyo.vim'
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
 " File tree viewer
 Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
@@ -83,7 +97,12 @@ set laststatus=2
 set noshowmode
 
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'modified' ] ]
+      \ },
       \ 'component_function': {
 			\   'filename': 'LightlineFilename'
       \ },
@@ -151,12 +170,16 @@ nmap <C-p>  :Files<CR>
 " Mouse can scroll
 set mouse=a
 
-" Use arrows to resize screen
+" Use arrows to resize buffers
 nnoremap <Down>     :resize +2<CR>
 nnoremap <Up>       :resize -2<CR>
 nnoremap <Right>    :vertical resize +2<CR>
 nnoremap <Left>     :vertical resize -2<CR>
-
+" Resize buffers quickly
+nnoremap <C-Down>     :resize +20<CR>
+nnoremap <C-Up>       :resize -20<CR>
+nnoremap <C-Right>    :vertical resize +20<CR>
+nnoremap <C-Left>     :vertical resize -20<CR>
 
 " Faster scrolling 
 nnoremap <C-d> 6<C-e> 
@@ -166,6 +189,8 @@ nnoremap <C-u> 6<C-y>
 " Exit terminal mode
 tmap <C-w> <C-\><C-n><C-w>
 
+" Set the vertical split character to a space (there is a single space after '\ ')
+:set fillchars+=vert:\ 
 
 " Open terminal with our setup file loaded
 nmap <Leader>T            :vsplit \| execute "terminal" \| startinsert <CR>
@@ -179,25 +204,26 @@ tnoremap <Leader>q <C-\><C-n>:bd!<CR>
 noremap  <Leader>q      <C-w>:bd!<CR>
 
 " Save session state (buffers, splits, file locations, etc) - Obsession
-noremap <F2> :Obsess! . <cr> " Quick write session with F2
+noremap <F2> :Obsess! tmp/Session.vim <cr> " Quick write session with F2
+
+" remap git blame command
+nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
+
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'m',
+                \ 'Staged'    :'+',
+                \ 'Untracked' :'u',
+                \ 'Renamed'   :'r',
+                \ 'Unmerged'  :'',
+                \ 'Deleted'   :'x',
+                \ 'Dirty'     :'',
+                \ 'Ignored'   :'i', 
+                \ 'Clean'     :'',
+                \ 'Unknown'   :'',
+                \ }
 
 
 "   Nerd tree 
-let g:nvim_tree_icons = {
-    \ 'default': "",
-    \ 'symlink': "",
-    \ 'git': {
-    \   'unstaged': "✗",
-    \   'staged': "✓",
-    \   'unmerged': "",
-    \   'renamed': "➜",
-    \   'untracked': "★",
-    \   'deleted': "",
-    \   'ignored': "◌"
-    \   }
-    \ }
-
-
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR> 
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -209,11 +235,17 @@ autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 
-let NERDTreeDirArrowExpandable=">"
-let NERDTreeDirArrowCollapsible="v"
+let g:WebDevIconsDisableDefaultFolderSymbolColorFromNERDTreeDir = 1
+let g:WebDevIconsDisableDefaultFileSymbolColorFromNERDTreeFile = 1
 
-" adding the flags to NERDTree
-let g:webdevicons_enable_nerdtree = 1
+let g:NERDTreeSyntaxDisableDefaultExtensions = 1
+let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+
+let NERDTreeDirArrowExpandable="▶"
+let NERDTreeDirArrowCollapsible="▽"
+
+let g:NERDTreeGitStatusUseNerdFonts = 1
 
 augroup nerdtreeconcealbrackets
       autocmd!
@@ -224,11 +256,7 @@ augroup nerdtreeconcealbrackets
 augroup END
 
 " a list of groups can be found at `:help nvim_tree_highlight`
-highlight NvimTreeFolderIcon guibg=blue
-
-let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
+" highlight NvimTreeFolderIcon guibg=blue
 
 " Coc language server et al
 " ref: https://github.com/neoclide/coc.nvim#example-vim-configuration
@@ -279,7 +307,13 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 
 
 let g:javascript_conceal_function             = "ƒ"
-" let g:javascript_conceal_return               = "⇚"
 let g:javascript_conceal_arrow_function       = "⇒"
+
+let g:typescript_conceal_function             = "ƒ"
+let g:typescript_conceal_arrow_function       = "⇒"
+
+
+
+autocmd FileType scss setl iskeyword+=@-@
 
 let g:rustfmt_autosave = 1

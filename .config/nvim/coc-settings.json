@@ -2,9 +2,12 @@
   "coc.preferences.formatOnSaveFiletypes": [
     "elm",
     "css",
-    "scss"
+    "scss",
+    "javascript",
+    "typescript"
   ],
-  "coc.preferences.codeLens.enable": true,
+ "prettier.tabWidth": 2,
+ "coc.preferences.codeLens.enable": true,
   "languageserver": {
     "elmLS": {
       "command": "elm-language-server",
