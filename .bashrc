@@ -177,6 +177,18 @@ if [[ -n "$OPEN_DEFAULT_TABS" ]]; then
     exit 0 # close the calling process so only the "default tabs" are left open
 fi
 
+# Open nvim with default Session state
+alias nemo='nvim -S tmp/Session.vim'
+
+aric() {
+    ARIC_PATH="$HOME/aric/$1"
+    cd $ARIC_PATH   
+    nvim -S "$ARIC_PATH/tmp/Session.vim"
+}
+
+alias aric4='aric aric_4'
+alias aricm='aric master'
+
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=/$HOME'
 # alias cfg='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
 
