@@ -1,4 +1,4 @@
-"
+
 "   Jack Murphy vim
 "
 "
@@ -135,6 +135,7 @@ set conceallevel=2
 
 " On startup
 autocmd VimEnter * edit ~/.bashrc
+autocmd VimEnter * edit ~/.bash_git_shortcuts
 autocmd VimEnter * edit ~/.tmux.conf
 autocmd VimEnter * edit $MYVIMRC
 
