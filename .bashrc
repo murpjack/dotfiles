@@ -197,5 +197,9 @@ if [ -f $HOME/.bash_git_shortcuts ]; then
     . $HOME/.bash_git_shortcuts
 fi
 
+# Rust package manager
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 . "$HOME/.cargo/env"
+
+# Haskell compiler
+[ -f "/home/jack/.ghcup/env" ] && source "/home/jack/.ghcup/env" # ghcup-env
