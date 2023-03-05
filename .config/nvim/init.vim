@@ -1,42 +1,38 @@
-
-"   Jack Murphy vim
-"
-"
-set nocompatible
-if !exists('g:syntax_on')
-	syntax enable
-endif
-set encoding=utf8
-set nonumber
-set nowrap
-
-" Toggle line numbers
-nmap <F1> :set number!<CR>
-
-
 " Both , and \ act as leader
 let mapleader = ','
 map \ <Leader>
 
+set nocompatible
+if !exists('g:syntax_on')
+	syntax enable
+endif
+
+" Format
+set encoding=utf8
+set nonumber
+set nowrap
+
+" Indent
+filetype plugin indent on
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+" Mouse can scroll
+set mouse=a
+
+" conceallevels 
+" 0 - No concealed characters
+" 1 - Replace hidden for special characters
+" 2 - No hidden characters, unless substitute available
+" 3 - No hidden characters, regardless of settings
+set conceallevel=2
 
 " Allow embedded script highlighting
-"
-"   g:vimsyn_embed == 0      : disable (don't embed any scripts)
-"   g:vimsyn_embed == 'lPr'  : support embedded lua, python and ruby
 let g:vimsyn_embed= 'l'
 let g:loaded_perl_provider = 0
 
 let $FZF_DEFAULT_COMMAND='find . \! \( -type d \) \! -type d \! -name ''*.tags'' -printf ''%P\n'''
-
-function! BuildComposer(info)
-  if a:info.status != 'unchanged' || a:info.force
-    if has('nvim')
-      !cargo build --release --locked
-    else
-      !cargo build --release --locked --no-default-features --features json-rpc
-    endif
-  endif
-endfunction
 
 " Plugins
 let plugins_dir = '~/.config/nvim/vim-plug'
@@ -46,50 +42,46 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
-Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'jreybert/vimagit'
-Plug 'zivyangll/git-blame.vim'
-Plug 'sheerun/vim-polyglot'
-"Plug 'jiangmiao/auto-pairs'
-Plug 'christoomey/vim-tmux-navigator'
 
-
-" Markdown & note-taking
-Plug 'junegunn/goyo.vim'
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
-
-" File tree viewer
+" File tree
 Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
 
-" Language server
+" Language 
+Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
 Plug 'elm-tooling/elm-language-server'
-Plug 'sbdchd/neoformat'
-Plug 'rust-lang/rust.vim'
+Plug 'christoomey/vim-tmux-navigator'
 
-" Colours
-Plug 'rainglow/vim'
+" Git 
+Plug 'tpope/vim-fugitive'
+Plug 'jreybert/vimagit'
+Plug 'zivyangll/git-blame.vim'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Style
 Plug 'bluz71/vim-moonfly-colors'
+Plug 'itchyny/lightline.vim'
+
+" Experimental 
+Plug 'murpjack/bins_rust'
 
 call plug#end()
 
-filetype plugin indent on
-set tabstop=2
-set shiftwidth=2
-set expandtab
-
+" On startup
+autocmd VimEnter * edit ~/.bashrc
+autocmd VimEnter * edit ~/.bash_git_shortcuts
+autocmd VimEnter * edit ~/.tmux.conf
+autocmd VimEnter * edit $MYVIMRC
 
 if (has("termguicolors"))
   set termguicolors
 endif
 
-"colorscheme absent-contrast
+" colorscheme absent-contrast
 colorscheme moonfly
 
 " lightline
@@ -114,58 +106,26 @@ function! CurrentTime()
   return strftime("%H:%M")
 endfunction
 
-
 let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 
-
-
-" conceallevels 
-" 0 - No concealed characters
-" 1 - Replace hidden for special characters
-" 2 - No hidden characters, unless substitute available
-" 3 - No hidden characters, regardless of settings
-set conceallevel=2
-
-
-" On startup
-autocmd VimEnter * edit ~/.bashrc
-autocmd VimEnter * edit ~/.bash_git_shortcuts
-autocmd VimEnter * edit ~/.tmux.conf
-autocmd VimEnter * edit $MYVIMRC
-
-
 " Re-source nvim
 nnoremap <Leader>sr :source $MYVIMRC<CR>
-
-" ctrl save in normal or insert mode
-noremap <c-s> :w<CR>
-inoremap <c-s> <Esc>:w<CR>a
 
 " Search recently-used history
 nmap <C-c>  :History:<space><CR>
 
-
 " Search all available nvim commands
 nmap <Leader>c  :Commands<CR>
-
 
 " See all open buffers
 nnoremap <Leader><Space>          :Buf<CR>
 tnoremap <Leader><Space> <C-\><C-n>:Buf<CR>
 
-
 " Search in home or present directory
 nmap <C-l>  :Files $HOME<CR>
 nmap <C-p>  :Files<CR>
-
-
-
-" Navigation
-
-" Mouse can scroll
-set mouse=a
 
 " Use arrows to resize buffers
 nnoremap <Down>     :resize +2<CR>
@@ -179,9 +139,8 @@ nnoremap <C-Right>    :vertical resize +20<CR>
 nnoremap <C-Left>     :vertical resize -20<CR>
 
 " Faster scrolling 
-nnoremap <C-d> 6<C-e> 
-nnoremap <C-u> 6<C-y>
-
+nnoremap <C-d> 20<C-e> 
+nnoremap <C-u> 20<C-y>
 
 " Exit terminal mode
 tmap <C-w> <C-\><C-n><C-w>
@@ -204,7 +163,7 @@ noremap  <Leader>q      <C-w>:bd!<CR>
 noremap <F2> :Obsess! tmp/Session.vim <cr> " Quick write session with F2
 
 " remap git blame command
-nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
+nnoremap <Leader>bl :<C-u>call gitblame#echo()<CR>
 
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'m',
@@ -220,7 +179,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 
 
-"   Nerd tree 
+" Nerd tree 
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR> 
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -230,7 +189,6 @@ nnoremap <C-f> :NERDTreeFind<CR>
 " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
 
 let g:WebDevIconsDisableDefaultFolderSymbolColorFromNERDTreeDir = 1
 let g:WebDevIconsDisableDefaultFileSymbolColorFromNERDTreeFile = 1
@@ -252,13 +210,7 @@ augroup nerdtreeconcealbrackets
       autocmd FileType nerdtree setlocal concealcursor=nvic
 augroup END
 
-" a list of groups can be found at `:help nvim_tree_highlight`
-" highlight NvimTreeFolderIcon guibg=blue
-
-" Coc language server et al
-" ref: https://github.com/neoclide/coc.nvim#example-vim-configuration
-
-" Tab to select a value from autocomplete list
+" Tab key to select a value from autocomplete list
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
@@ -302,7 +254,6 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-
 let g:javascript_conceal_function             = "ƒ"
 let g:javascript_conceal_arrow_function       = "⇒"
 
@@ -310,7 +261,16 @@ let g:typescript_conceal_function             = "ƒ"
 let g:typescript_conceal_arrow_function       = "⇒"
 
 
-
 autocmd FileType scss setl iskeyword+=@-@
 
 let g:rustfmt_autosave = 1
+
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release --locked
+    else
+      !cargo build --release --locked --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
