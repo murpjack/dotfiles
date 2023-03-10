@@ -22,10 +22,6 @@ set expandtab
 set mouse=a
 
 " conceallevels 
-" 0 - No concealed characters
-" 1 - Replace hidden for special characters
-" 2 - No hidden characters, unless substitute available
-" 3 - No hidden characters, regardless of settings
 set conceallevel=2
 
 " Allow embedded script highlighting
@@ -64,14 +60,13 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Style
 Plug 'bluz71/vim-moonfly-colors'
-Plug 'itchyny/lightline.vim'
 
 " Experimental 
 Plug 'murpjack/bins_rust'
 
 call plug#end()
 
-" On startup
+" Startup
 autocmd VimEnter * edit ~/.bashrc
 autocmd VimEnter * edit ~/.bash_git_shortcuts
 autocmd VimEnter * edit ~/.tmux.conf
@@ -81,34 +76,29 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
-" colorscheme absent-contrast
 colorscheme moonfly
 
-" lightline
-set laststatus=2
-set noshowmode
+" statusline 
+" for colours - :so $VIMRUNTIME/syntax/hitest.vim
+set statusline=
+set statusline+=%#BufferTabpages#  " set git branch name
+set statusline+=%{StatuslineGit()} " git branch name
+set statusline+=%#StatusLineTerm#  " set background colour
+set statusline+=%f                 " file
+set statusline+=%m                 " has file been modified?
+set statusline+=%=                 " separate left & right
+set statusline+=\ %p%%             " % through file
+set statusline+=\ %l:%c            " line & char in line
+set statusline+=\                  " trailing space
 
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'right': [ [ 'lineinfo' ],
-      \              [ 'percent' ],
-      \              [ 'modified' ],
-      \              [ 'currentTime' ]
-      \  ]
-      \ },
-      \ 'component_function': {
-			\   'currentTime': 'CurrentTime'
-      \ },
-      \ }
-
-function! CurrentTime() 
-  return strftime("%H:%M")
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
 endfunction
 
-let g:unite_force_overwrite_statusline = 0
-let g:vimfiler_force_overwrite_statusline = 0
-let g:vimshell_force_overwrite_statusline = 0
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
 
 " Re-source nvim
 nnoremap <Leader>sr :source $MYVIMRC<CR>
@@ -145,15 +135,11 @@ nnoremap <C-u> 20<C-y>
 " Exit terminal mode
 tmap <C-w> <C-\><C-n><C-w>
 
-" Set the vertical split character to a space (there is a single space after '\ ')
-:set fillchars+=vert:\ 
-
 " Open terminal with our setup file loaded
 nmap <Leader>T            :vsplit \| execute "terminal" \| startinsert <CR>
 tmap <Leader>T  <C-\><C-n>:vsplit \| execute "terminal" \| startinsert <CR>
 nmap <Leader>t            :split  \| execute "terminal" \| startinsert <CR>
 tmap <Leader>t  <C-\><C-n>:split  \| execute "terminal" \| startinsert <CR>
-
 
 " Force quit a window
 tnoremap <Leader>q <C-\><C-n>:bd!<CR>
@@ -178,13 +164,11 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Unknown'   :'',
                 \ }
 
-
 " Nerd tree 
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR> 
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
-
 
 " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
@@ -239,6 +223,9 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Fix code suggestions 
+nmap <leader>do <Plug>(coc-codeaction)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call ShowDocumentation()<CR>

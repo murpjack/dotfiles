@@ -197,6 +197,8 @@ if [ -f $HOME/.bash_git_shortcuts ]; then
     . $HOME/.bash_git_shortcuts
 fi
 
+alias python=python3
+
 # Rust package manager
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 . "$HOME/.cargo/env"
