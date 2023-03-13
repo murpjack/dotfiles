@@ -58,8 +58,17 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    
+    # Read Mike's custom prompt, apply it to PS1.
+    source "$HOME/.mkps1.sh"
+    PS1="$(__mkps1)"
+
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    # Modified to support git status in PS1.
+    # Also modified by Mike to function better.
+    #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='\n${debian_chroot:+($debian_chroot)}\u:\w$(__git_ps1 " (%s)")\n\$ '
+
 fi
 unset color_prompt force_color_prompt
 
@@ -122,13 +131,13 @@ fi
 # COPIED - Add this to your PATH if it’s not already declared
 export PATH=$PATH:$HOME/.local/bin
 
-# Powerline configuration
-if [ -f $HOME/.local/lib/python3.8/site-packages/powerline/bindings/bash/powerline.sh ]; then
-    $HOME/.local/bin/powerline-daemon -q
-    POWERLINE_BASH_CONTINUATION=1
-    POWERLINE_BASH_SELECT=1
-    source $HOME/.local/lib/python3.8/site-packages/powerline/bindings/bash/powerline.sh
-fi
+## Powerline configuration
+#if [ -f $HOME/.local/lib/python3.8/site-packages/powerline/bindings/bash/powerline.sh ]; then
+#    $HOME/.local/bin/powerline-daemon -q
+#    POWERLINE_BASH_CONTINUATION=1
+#    POWERLINE_BASH_SELECT=1
+#    source $HOME/.local/lib/python3.8/site-packages/powerline/bindings/bash/powerline.sh
+#fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
