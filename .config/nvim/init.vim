@@ -85,34 +85,23 @@ set laststatus=2
 set noshowmode
 
 let g:lightline = {
-      \ 'colorscheme': 'wombatish',
+      \ 'colorscheme': 'moonfly',
       \ 'active': {
       \   'left': [ [ 'mode' ],
       \             [ 'currentTime' ],
-      \             [ 'gitBranch', 'filename' ],
+      \             [ 'filename' ],
       \           ],
       \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
       \ },
       \ 'inactive': {
-      \   'left':  [ [ 'gitBranch', 'filename' ] ],
+      \   'left':  [ [ 'filename' ] ],
       \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
-      \ },
-      \ 'component_expand': {
-      \   'currentTime': 'CurrentTime',
-      \   'gitBranch': 'LightlineGitBranch'
       \ },
       \ 'component_function': {
 	    \   'filename': 'LightlineFilename',
-      \ },
-      \ 'component_type': {
-      \   'currentTime': 'time',
-      \   'gitBranch': 'gitbranch'
+      \   'currentTime': 'CurrentTime',
       \ },
       \ }
-
-function! LightlineGitBranch()
-  return &buftype ==# 'terminal' ? '' : StatuslineGit() 
-endfunction
 
 function! LightlineFilename()
   if &buftype ==# 'terminal' 
@@ -120,18 +109,10 @@ function! LightlineFilename()
   else
     let filename = expand('%:t') !=# '' ? expand("%:~:.") : '[No Name]'
     let modified = &modified ? '✏️  ' : '   '
-    return filename . modified
+    return StatuslineGit() . ' ' . filename . modified
   endif 
 endfunction
  
-function! LightlineColRow()
-  if &buftype ==# 'terminal' 
-    return ''
-  else
-    return 'poop'   
-  endif
-endfunction
-
 function! CurrentTime() 
   return strftime("%H:%M")
 endfunction
