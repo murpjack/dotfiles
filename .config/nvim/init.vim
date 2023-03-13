@@ -38,6 +38,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
+Plug 'itchyny/lightline.vim'
 
 " File tree
 Plug 'scrooloose/nerdtree'
@@ -62,7 +63,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'bluz71/vim-moonfly-colors'
 
 " Experimental 
-Plug 'murpjack/bins_rust'
+" Plug 'murpjack/bins_rust'
 
 call plug#end()
 
@@ -77,19 +78,63 @@ if (has("termguicolors"))
 endif
 
 colorscheme moonfly
-
+ 
 " statusline 
 " for colours - :so $VIMRUNTIME/syntax/hitest.vim
-set statusline=
-set statusline+=%#BufferTabpages#  " set git branch name
-set statusline+=%{StatuslineGit()} " git branch name
-set statusline+=%#StatusLineTerm#  " set background colour
-set statusline+=%f                 " file
-set statusline+=%m                 " has file been modified?
-set statusline+=%=                 " separate left & right
-set statusline+=\ %p%%             " % through file
-set statusline+=\ %l:%c            " line & char in line
-set statusline+=\                  " trailing space
+set laststatus=2
+set noshowmode
+
+let g:lightline = {
+      \ 'colorscheme': 'wombatish',
+      \ 'active': {
+      \   'left': [ [ 'mode' ],
+      \             [ 'currentTime' ],
+      \             [ 'gitBranch', 'filename' ],
+      \           ],
+      \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
+      \ },
+      \ 'inactive': {
+      \   'left':  [ [ 'gitBranch', 'filename' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
+      \ },
+      \ 'component_expand': {
+      \   'currentTime': 'CurrentTime',
+      \   'gitBranch': 'LightlineGitBranch'
+      \ },
+      \ 'component_function': {
+	    \   'filename': 'LightlineFilename',
+      \ },
+      \ 'component_type': {
+      \   'currentTime': 'time',
+      \   'gitBranch': 'gitbranch'
+      \ },
+      \ }
+
+function! LightlineGitBranch()
+  return &buftype ==# 'terminal' ? '' : StatuslineGit() 
+endfunction
+
+function! LightlineFilename()
+  if &buftype ==# 'terminal' 
+    return ''
+  else
+    let filename = expand('%:t') !=# '' ? expand("%:~:.") : '[No Name]'
+    let modified = &modified ? '✏️  ' : '   '
+    return filename . modified
+  endif 
+endfunction
+ 
+function! LightlineColRow()
+  if &buftype ==# 'terminal' 
+    return ''
+  else
+    return 'poop'   
+  endif
+endfunction
+
+function! CurrentTime() 
+  return strftime("%H:%M")
+endfunction
 
 function! GitBranch()
   return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
@@ -99,6 +144,10 @@ function! StatuslineGit()
   let l:branchname = GitBranch()
   return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
 endfunction
+
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
 
 " Re-source nvim
 nnoremap <Leader>sr :source $MYVIMRC<CR>
