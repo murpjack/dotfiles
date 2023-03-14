@@ -101,9 +101,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# aliases to port
-alias vimwiki='vim ~/vimwiki/index.wiki'
-
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -166,24 +163,6 @@ fi
 # terminal, so long as it is an interactive (use `bash -i` if calling bash directly) type terminal
 if [[ -n "$TITLE_DEFAULT" ]]; then # If length of this is NONzero (see `man test`)
     set-title "$TITLE_DEFAULT"
-fi
-
-DEFAULT_TABS_TITLE1="notes"
-DEFAULT_TABS_TITLE2="aric"
-
-DEFAULT_TABS_CMD1="vimwiki"
-DEFAULT_TABS_CMD2="cd ~/Development/aric/"
-
-tabs() {
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-}
-
-# If length of this is NONzero
-if [[ -n "$OPEN_DEFAULT_TABS" ]]; then
-    OPEN_DEFAULT_TABS= # reset to an empty string so this only happens ONCE
-    tabs
-    exit 0 # close the calling process so only the "default tabs" are left open
 fi
 
 # Open nvim with default Session state
