@@ -232,6 +232,16 @@ augroup nerdtreeconcealbrackets
       autocmd FileType nerdtree setlocal concealcursor=nvic
 augroup END
 
+let g:coc_global_extensions = [
+      \'coc-highlight',
+      \'coc-json', 
+      \'coc-css',
+      \'coc-tsserver',
+      \'coc-prettier',
+      \'coc-rust-analyzer',
+      \'coc-eslint'
+      \]
+
 " Tab key to select a value from autocomplete list
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
