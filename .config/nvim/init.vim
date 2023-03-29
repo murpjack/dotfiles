@@ -21,7 +21,7 @@ set expandtab
 " Mouse can scroll
 set mouse=a
 
-" conceallevels 
+" conceallevels
 set conceallevel=2
 
 " Allow embedded script highlighting
@@ -34,7 +34,7 @@ let $FZF_DEFAULT_COMMAND='find . \! \( -type d \) \! -type d \! -name ''*.tags''
 let plugins_dir = '~/.config/nvim/vim-plug'
 call plug#begin(expand(plugins_dir))
 
-Plug 'junegunn/fzf' 
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
@@ -46,14 +46,14 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'vim-scripts/vim-nerdtree_plugin_open'
 
-" Language 
+" Language
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
 Plug 'elm-tooling/elm-language-server'
 Plug 'christoomey/vim-tmux-navigator'
 
-" Git 
+" Git
 Plug 'tpope/vim-fugitive'
 Plug 'jreybert/vimagit'
 Plug 'zivyangll/git-blame.vim'
@@ -62,7 +62,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " Style
 Plug 'bluz71/vim-moonfly-colors'
 
-" Experimental 
+" Experimental
 " Plug 'murpjack/bins_rust'
 
 call plug#end()
@@ -78,8 +78,8 @@ if (has("termguicolors"))
 endif
 
 colorscheme moonfly
- 
-" statusline 
+
+" statusline
 " for colours - :so $VIMRUNTIME/syntax/hitest.vim
 set laststatus=2
 set noshowmode
@@ -104,16 +104,16 @@ let g:lightline = {
       \ }
 
 function! LightlineFilename()
-  if &buftype ==# 'terminal' 
+  if &buftype ==# 'terminal'
     return ''
   else
     let filename = expand('%:t') !=# '' ? expand("%:~:.") : '[No Name]'
     let modified = &modified ? '✏️  ' : '   '
     return StatuslineGit() . ' ' . filename . modified
-  endif 
+  endif
 endfunction
- 
-function! CurrentTime() 
+
+function! CurrentTime()
   return strftime("%H:%M")
 endfunction
 
@@ -125,6 +125,14 @@ function! StatuslineGit()
   let l:branchname = GitBranch()
   return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
 endfunction
+
+" function! BinDay()
+"  let l:binDayFile = system("~/.config/nvim/binday/bins_rust")
+"  " :! l:binDayFile
+"  let l:binDay = '🗑'
+"  " return l:binDay
+"  return l:binDayFile
+" endfunction
 
 let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
@@ -158,8 +166,8 @@ nnoremap <C-Up>       :resize -20<CR>
 nnoremap <C-Right>    :vertical resize +20<CR>
 nnoremap <C-Left>     :vertical resize -20<CR>
 
-" Faster scrolling 
-nnoremap <C-d> 20<C-e> 
+" Faster scrolling
+nnoremap <C-d> 20<C-e>
 nnoremap <C-u> 20<C-y>
 
 " Exit terminal mode
@@ -189,14 +197,14 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Unmerged'  :'',
                 \ 'Deleted'   :'x',
                 \ 'Dirty'     :'',
-                \ 'Ignored'   :'i', 
+                \ 'Ignored'   :'i',
                 \ 'Clean'     :'',
                 \ 'Unknown'   :'',
                 \ }
 
-" Nerd tree 
+" Nerd tree
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR> 
+nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
@@ -218,8 +226,8 @@ let g:NERDTreeGitStatusUseNerdFonts = 1
 
 augroup nerdtreeconcealbrackets
       autocmd!
-      autocmd FileType nerdtree syntax match hideBracketsInNerdTree "\]" contained conceal containedin=ALL cchar= 
-      autocmd FileType nerdtree syntax match hideBracketsInNerdTree "\[" contained conceal containedin=ALL
+    "  autocmd FileType nerdtree syntax match hideBracketsInNerdTree "\]" contained conceal containedin=ALL cchar=
+     " autocmd FileType nerdtree syntax match hideBracketsInNerdTree "\[" contained conceal containedin=ALL
       autocmd FileType nerdtree setlocal conceallevel=2
       autocmd FileType nerdtree setlocal concealcursor=nvic
 augroup END
@@ -254,7 +262,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Fix code suggestions 
+" Fix code suggestions
 nmap <leader>do <Plug>(coc-codeaction)
 
 " Use K to show documentation in preview window.
