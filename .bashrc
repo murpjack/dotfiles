@@ -8,6 +8,8 @@ case $- in
       *) return;;
 esac
 
+
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -40,6 +42,14 @@ case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
+prompt() {
+    PS1="$(powerline-rs --modules time,host,user,cwd,linebreak,git,gitstage --shell bash $?)"
+}
+
+if [ "$TERM" != "linux" ]; then
+        PROMPT_COMMAND=prompt
+fi
+
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
@@ -58,16 +68,8 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    
-    # Read Mike's custom prompt, apply it to PS1.
-    source "$HOME/.mkps1.sh"
-    PS1="$(__mkps1)"
-
 else
-    # Modified to support git status in PS1.
-    # Also modified by Mike to function better.
-    #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-    PS1='\n${debian_chroot:+($debian_chroot)}\u:\w$(__git_ps1 " (%s)")\n\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 
 fi
 unset color_prompt force_color_prompt
@@ -165,18 +167,6 @@ if [[ -n "$TITLE_DEFAULT" ]]; then # If length of this is NONzero (see `man test
     set-title "$TITLE_DEFAULT"
 fi
 
-# Open nvim with default Session state
-alias nemo='nvim -S tmp/Session.vim'
-
-aric() {
-    ARIC_PATH="$HOME/aric/$1"
-    cd $ARIC_PATH   
-    nvim -S "$ARIC_PATH/tmp/Session.vim"
-}
-
-alias aric4='aric aric_4'
-alias aricm='aric master'
-
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=/$HOME'
 # alias cfg='/usr/bin/git --git-dir=/home/jackmurphy/.cfg/ --work-tree=/home/jackmurphy'
 
@@ -188,8 +178,13 @@ fi
 alias python=python3
 
 # Rust package manager
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-. "$HOME/.cargo/env"
+# export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # Haskell compiler
 [ -f "/home/jack/.ghcup/env" ] && source "/home/jack/.ghcup/env" # ghcup-env
+
+complete -C /usr/bin/terraform terraform
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+alias nvimdiff='nvim -d'

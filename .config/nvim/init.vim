@@ -34,8 +34,10 @@ let $FZF_DEFAULT_COMMAND='find . \! \( -type d \) \! -type d \! -name ''*.tags''
 let plugins_dir = '~/.config/nvim/vim-plug'
 call plug#begin(expand(plugins_dir))
 
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf'
+" Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
 Plug 'itchyny/lightline.vim'
@@ -51,7 +53,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-highlight'
 Plug 'elm-tooling/elm-language-server'
-Plug 'christoomey/vim-tmux-navigator'
+Plug 'nbouscal/vim-stylish-haskell'
+Plug 'hashivim/vim-terraform'
+Plug 'juliosueiras/vim-terraform-completion'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -61,23 +65,26 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Style
 Plug 'bluz71/vim-moonfly-colors'
+Plug 'tomasiser/vim-code-dark'
 
 " Experimental
 " Plug 'murpjack/bins_rust'
 
 call plug#end()
 
-" Startup
-autocmd VimEnter * edit ~/.bashrc
-autocmd VimEnter * edit ~/.bash_git_shortcuts
-autocmd VimEnter * edit ~/.tmux.conf
-autocmd VimEnter * edit $MYVIMRC
+function! Up()
+  execute "edit ~/.tmux.conf"
+  execute "edit ~/.bashrc"
+  execute "edit ~/.bash_git_shortcuts"
+  execute "edit $MYVIMRC"
+endfunction
 
 if (has("termguicolors"))
   set termguicolors
 endif
 
-colorscheme moonfly
+"colorscheme moonfly
+colorscheme codedark
 
 " statusline
 " for colours - :so $VIMRUNTIME/syntax/hitest.vim
@@ -303,3 +310,8 @@ function! BuildComposer(info)
     endif
   endif
 endfunction
+
+let g:terraform_fmt_on_save = 1
+let g:terraform_align = 1
+let g:terraform_completion_keys = 1
+
