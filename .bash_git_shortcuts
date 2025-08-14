@@ -20,6 +20,12 @@ VIOLET="#d183e8"
 CRIMSON="#ff5189"
 RED="#ff5454"
 
+HASH=$CRANBERRY
+DATE=$CORAL
+TAG=$TURQUOISE
+AUTHOR=$ORANGE
+
+
 # The name of the current branch
 # Back-compatibility wrapper for when this function was defined here in
 # the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
@@ -193,7 +199,7 @@ alias glgg='git log --graph'
 alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
 alias glo='git log --oneline --decorate'
-alias golf="git log --pretty=format:%C\($VIOLET\)%h\ %ad%C\($RED\)%d\ %Creset%s%C\($BLUE\)\ [%cn] --decorate --date=short"  
+alias golf="git log --pretty=format:%C\($HASH\)%h\ %C\($DATE\)%ad%C\($TAG\)%d\ %Creset%s%C\($AUTHOR\)\ 𖨆%cn --decorate --date=short"  
 alias graf="git log --graph --pretty='%C($VIOLET)%h %ad%Creset -%C($TURQUOISE)%d%Creset %s %C($BLUE)(%cn)' --abbrev-commit --date=short"
 alias gorilla="git log --graph --pretty='%C($VIOLET)%h %ad%Creset -%C($TURQUOISE)%d%Creset %s %C($BLUE)(%cn)' --abbrev-commit --all --date=short"
 alias glog='git log --oneline --decorate --graph'
