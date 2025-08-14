@@ -42,13 +42,11 @@ case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
-prompt() {
-    PS1="$(powerline-rs --modules time,host,user,cwd,linebreak,git,gitstage --shell bash $?)"
-}
-
-if [ "$TERM" != "linux" ]; then
-        PROMPT_COMMAND=prompt
+if [[ -n $PS1 && -f ~/.bash_prompt ]]; then
+    . ~/.bash_prompt
+    ps1_colorful_theme
 fi
+
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
@@ -188,3 +186,4 @@ complete -C /usr/bin/terraform terraform
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 alias nvimdiff='nvim -d'
+. "$HOME/.cargo/env"
